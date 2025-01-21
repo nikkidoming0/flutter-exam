@@ -7,12 +7,12 @@ class SocialApi {
 
   SocialApi({required this.apiWrapper});
 
-  Future<ApiResponse<SocialResultEntity>> getSocial() async {
-    return await apiWrapper.request<SocialResultEntity>(
+  Future<ApiResponse<List<SocialResultEntity>>> getSocial() async {
+    return await apiWrapper.request<List<SocialResultEntity>>(
           () async => await apiWrapper.dio.get(
         '/socials',
       ),
-      fromJson: (json) => SocialResultEntity.fromJson(json),
+      fromJson: (json) => List.from(json).map((e) => SocialResultEntity.fromJson(e)).toList(),
     );
   }
 }

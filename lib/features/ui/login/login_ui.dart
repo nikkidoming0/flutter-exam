@@ -30,7 +30,6 @@ class LoginScreen extends StatelessWidget {
             break;
           case LoginStatus.showPin:
             showPinDialog(context);
-            AppDialog.dismiss(context);
             break;
           case LoginStatus.closePin:
             AppDialog.dismiss(context);
@@ -186,7 +185,7 @@ void showPinDialog(BuildContext context) {
       },
       onEnter: (pin) {
         loginBloc.add(LoginVerifyEvent(otp: pin));
-        AppDialog.dismiss(context);
+        context.pop();
       },
     ),
   );

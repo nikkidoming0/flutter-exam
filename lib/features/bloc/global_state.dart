@@ -12,28 +12,28 @@ enum ErrorMsgStatus {
 enum SocialStatus {
   initial,
   loading,
+  simulateLogout,
   fetch,
   error,
+  logout,
 }
 
 final class GlobalState extends Equatable {
-  const GlobalState(
-      {this.loginStatus = LoginStatus.initial,
-      this.errorMsgStatus = ErrorMsgStatus.initial,
-      this.socialStatus = SocialStatus.initial,
-      this.userName = "",
-      this.otp = "",
-      this.isBtnEnabled = false,
-      this.userModel = const UserModel(
-        username: "",
-        userId: "",
-        imgUrl: "",
-      ),
-      this.socialModel = const SocialModel(
-        name: "",
-        history: "",
-        imgUrl: "",
-      )});
+  const GlobalState({
+    this.loginStatus = LoginStatus.initial,
+    this.errorMsgStatus = ErrorMsgStatus.initial,
+    this.socialStatus = SocialStatus.initial,
+    this.userName = "",
+    this.otp = "",
+    this.isBtnEnabled = false,
+    this.userModel = const UserModel(
+      username: "",
+      userId: "",
+      imgUrl: "",
+    ),
+    this.socialModel = const [],
+    this.companyModel = const [],
+  });
 
   final LoginStatus loginStatus;
   final ErrorMsgStatus errorMsgStatus;
@@ -42,7 +42,8 @@ final class GlobalState extends Equatable {
   final String otp;
   final bool isBtnEnabled;
   final UserModel userModel;
-  final SocialModel socialModel;
+  final List<SocialModel> socialModel;
+  final List<CompanyModel> companyModel;
 
   GlobalState copyWith({
     LoginStatus? loginStatus,
@@ -52,8 +53,9 @@ final class GlobalState extends Equatable {
     String? otp,
     bool? isBtnEnabled,
     List<String>? socialList,
+    List<CompanyModel>? companyModel,
     UserModel? userModel,
-    SocialModel? socialModel,
+    List<SocialModel>? socialModel,
   }) {
     return GlobalState(
       loginStatus: loginStatus ?? this.loginStatus,
@@ -64,6 +66,7 @@ final class GlobalState extends Equatable {
       isBtnEnabled: isBtnEnabled ?? this.isBtnEnabled,
       userModel: userModel ?? this.userModel,
       socialModel: socialModel ?? this.socialModel,
+      companyModel: companyModel ?? this.companyModel,
     );
   }
 
@@ -77,5 +80,6 @@ final class GlobalState extends Equatable {
         isBtnEnabled,
         userModel,
         socialModel,
+        companyModel,
       ];
 }

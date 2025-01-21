@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_exam/core/constants/app_assets.dart';
 import 'package:flutter_exam/core/constants/app_colors.dart';
 import 'package:flutter_exam/features/bloc/global_bloc.dart';
 import 'package:flutter_exam/features/routes/routes.dart';
@@ -30,10 +29,8 @@ class _SocialHomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    context.read<GlobalBloc>().add(GetSocialDataEvent());
-
     return BlocConsumer<GlobalBloc, GlobalState>(
+      listenWhen: (prev,curr) => prev.socialStatus != curr.socialStatus,
       listener: (context, state) {
         switch (state.socialStatus) {
           case SocialStatus.initial:
@@ -44,6 +41,10 @@ class _SocialHomeWidget extends StatelessWidget {
             break;
           case SocialStatus.error:
             break;
+          case SocialStatus.logout:
+            context.push(Routes.login);
+            break;
+          case SocialStatus.simulateLogout:
         }
       },
       builder: (context, state) {
@@ -56,8 +57,12 @@ class _SocialHomeWidget extends StatelessWidget {
                 const _IconView(),
               ],
             ),
-            if(context.watch<GlobalBloc>().state.socialStatus == SocialStatus.loading)
-              AppLoading(message: AppLocalizations.of(context)!.msgFetchData)
+            if (context.watch<GlobalBloc>().state.socialStatus ==
+                SocialStatus.loading)
+              AppLoading(message: AppLocalizations.of(context)!.msgFetchData),
+            if(context.watch<GlobalBloc>().state.socialStatus ==
+                SocialStatus.simulateLogout)
+              AppLoading(message: AppLocalizations.of(context)!.msgLogout)
           ],
         );
       },
@@ -79,7 +84,8 @@ class _UserHeaderWidget extends StatelessWidget {
             actions: [
               CupertinoActionSheetAction(
                 onPressed: () {
-                  context.pushNamed(Routes.login);
+                  context.pop();
+                  context.read<GlobalBloc>().add(LogoutEvent());
                 },
                 child: Container(
                   height: 20.h,
@@ -184,31 +190,57 @@ class _IconView extends StatelessWidget {
     return BlocBuilder<GlobalBloc, GlobalState>(
       builder: (context, state) {
         return Expanded(
-          child: GridView(
+          child: GridView.builder(
             padding: EdgeInsets.symmetric(horizontal: 60.w),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // Two columns
               mainAxisSpacing: 60.h, // Spacing between rows
               crossAxisSpacing: 50.w, // Spacing between columns
             ),
-            children: [
-              AppIcon(iconString: AppAssets.youtube),
-              AppIcon(iconString: AppAssets.spotify),
-              AppIcon(iconString: AppAssets.facebook),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.r),
-                child: Container(
-                  color: AppColors.yellowIconColor,
-                  width: 50.h,
-                  height: 50.h,
-                  child: Icon(
-                    Icons.exit_to_app,
-                    color: Colors.white,
-                    size: 40.h,
+            itemCount: state.companyModel.length,
+            itemBuilder: (BuildContext context, int index) {
+              final data = state.companyModel[index];
+              if (data.isFromApi) {
+                return InkWell(
+                  borderRadius: BorderRadius.circular(8.r),
+                  onTap: () {
+                    context.push(
+                      Routes.companyDetails,
+                      extra: {
+                        'socialModel': state.socialModel[index],
+                        'companyDetails': state.companyModel[index]
+                      },
+                    );
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: AppIcon(
+                      iconString: data.imgAsset,
+                    ),
                   ),
-                ),
-              ),
-            ],
+                );
+              } else {
+                return InkWell(
+                  borderRadius: BorderRadius.circular(8.r),
+                  onTap: () {
+                    context.push(Routes.others);
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: Container(
+                      color: AppColors.yellowIconColor,
+                      width: 50.h,
+                      height: 50.h,
+                      child: Icon(
+                        Icons.exit_to_app,
+                        color: Colors.white,
+                        size: 40.h,
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
           ),
         );
       },

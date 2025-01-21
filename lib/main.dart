@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_exam/core/di/di.dart' as di;
 import 'package:flutter_exam/core/logging/app_logging.dart';
+import 'package:flutter_exam/features/domain/usecase/company_usecase.dart';
 import 'package:flutter_exam/features/domain/usecase/login_usecase.dart';
+import 'package:flutter_exam/features/domain/usecase/logout_usecase.dart';
 import 'package:flutter_exam/features/domain/usecase/social_usecase.dart';
 import 'package:flutter_exam/features/routes/app_routes.dart';
 import 'package:flutter_exam/features/bloc/global_bloc.dart';
@@ -25,7 +27,9 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => GlobalBloc(
         loginUseCase: di.getIt<LoginUseCase>(),
-        getSocialUseCase: di.getIt<GetSocialUseCase>()
+        getSocialUseCase: di.getIt<GetSocialUseCase>(),
+        companyUseCase: di.getIt<CompanyUseCase>(),
+        logoutUseCase: di.getIt<LogoutUseCase>()
       ),
       child: ScreenUtilInit(
         child: MaterialApp.router(

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_exam/core/util/app_theme.dart';
-import 'package:flutter_exam/features/domain/model/social_model.dart';
+import 'package:flutter_exam/features/domain/model/company_model.dart';
 import 'package:flutter_exam/features/ui/components/app_scaffold.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewScreen extends StatelessWidget {
 
-  final SocialModel data;
+  final CompanyModel data;
 
   const WebViewScreen({
     super.key,
@@ -19,8 +19,8 @@ class WebViewScreen extends StatelessWidget {
     final theme = AppTheme.determineThemeByName(data.name);
 
     final controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted);
-      // ..loadRequest(Uri.parse(data.webUrl));
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(data.webUrl));
 
     return AppScaffold(
       backgroundColor: Colors.white,

@@ -46,3 +46,13 @@ class GetSocialDataEvent extends GlobalEvent {
   @override
   List<Object?> get props => [];
 }
+
+class GetCompanyDetailsEvent extends GlobalEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class LogoutEvent extends GlobalEvent {
+  @override
+  List<Object?> get props => [];
+}

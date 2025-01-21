@@ -1,5 +1,8 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 class AppTheme {
   static ThemeModel determineThemeByName(String name) {
     switch (name.toLowerCase()) {
@@ -25,6 +28,15 @@ class AppTheme {
         );
     }
   }
+
+  static SystemUiOverlayStyle getSystemOverlayStyle() {
+    return const SystemUiOverlayStyle(
+      statusBarColor: Colors.black26,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light,
+    );
+  }
+
 }
 
 class ThemeModel {

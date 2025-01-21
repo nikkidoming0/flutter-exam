@@ -43,14 +43,28 @@ class SocialResultEntity extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory SocialResultEntity.fromJson(String source) {
-    final Map<String, dynamic> map = json.decode(source);
-    return SocialResultEntity.fromMap(map);
+  factory SocialResultEntity.fromJson(Map<String, dynamic> json) {
+    return SocialResultEntity(
+      name: json['name'] as String,
+      history: json['history'] as String,
+      imgUrl: json['imgUrl'] as String,
+    );
+  }
+
+  static List<SocialResultEntity> listFromJson(String source) {
+    final List<dynamic> list = json.decode(source) as List<dynamic>;
+    return list
+        .map((item) => SocialResultEntity.fromMap(item as Map<String, dynamic>))
+        .toList();
   }
 
   @override
   bool get stringify => true;
 
   @override
-  List<Object> get props => [name, history, imgUrl];
+  List<Object> get props => [
+        name,
+        history,
+        imgUrl,
+      ];
 }
